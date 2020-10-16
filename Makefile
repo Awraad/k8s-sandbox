@@ -1,6 +1,6 @@
 .PHONY: up down init cluster-up install uninstall logs repos namespaces cluster-down clean provision
 
-up: cluster-up init
+up: cluster-up init clone tkn tkn-cli
 
 down: cluster-down
 
@@ -23,6 +23,18 @@ cluster-up:
 init: logs repos namespaces
 platform: install-service-mesh install-ingress install-logging install-monitoring install-secrets
 deplatform: delete-service-mesh delete-ingress delete-logging delete-monitoring delete-secrets
+
+clone:
+	git clone https://github.com/Awraad/project-level3
+tkn:
+	kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+tkn-cli:
+	sudo apt update
+	sudo apt install -y gnupg
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3EFE0E0A2F2F60AA
+	echo "deb http://ppa.launchpad.net/tektoncd/cli/ubuntu eoan main"|sudo tee /etc/apt/sources.list.d/tektoncd-ubuntu-cli.list
+	sudo apt update && sudo apt install -y tektoncd-cli
+
 
 logs:
 	touch output.log

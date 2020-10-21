@@ -1,6 +1,6 @@
 .PHONY: up down init cluster-up install uninstall logs repos namespaces cluster-down clean provision
 
-up: cluster-up init clone tkn tkn-cli
+up: cluster-up init clone tkn tkn-cli install-ingress
 
 down: cluster-down
 

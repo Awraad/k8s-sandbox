@@ -1,6 +1,6 @@
 .PHONY: up down init cluster-up install uninstall logs repos namespaces cluster-down clean provision
 
-up: cluster-up init clone tkn tkn-cli install-ingress
+up: cluster-up init tkn tkn-cli install-ingress
 
 down: cluster-down
 
@@ -24,8 +24,6 @@ init: logs repos namespaces
 platform: install-service-mesh install-ingress install-logging install-monitoring install-secrets
 deplatform: delete-service-mesh delete-ingress delete-logging delete-monitoring delete-secrets
 
-clone:
-	git clone https://github.com/Awraad/project-level3
 tkn:
 	kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 tkn-cli:

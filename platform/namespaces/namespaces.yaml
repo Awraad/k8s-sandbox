@@ -57,4 +57,4 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sock-shop
+  name: elf

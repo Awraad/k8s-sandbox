@@ -8,7 +8,7 @@ cluster-down:
 	k3d cluster delete labs
 
 clean: logs
-	
+
 cluster-up:
 	k3d cluster create labs \
 	    -p 80:80@loadbalancer \
@@ -142,6 +142,19 @@ delete-grafana:
 	echo "Monitoring: delete-grafana" | tee -a output.log
 	helm delete -n monitoring grafana 2>/dev/null | true
 
+install-elf:
+	helm repo add elastic https://helm.elastic.co
+  helm repo add fluent https://fluent.github.io/helm-charts
+	helm repo update
+	helm install elasticsearch elastic/elasticsearch --version=7.9.0 --namespace=logging
+	helm install fluent-bit fluent/fluent-bit --namespace=logging
+	helm install kibana elastic/kibana --version=7.9.0 --namespace=logging --set service.type=NodePort
+install-graf:
+	helm repo add stable https://kubernetes-charts.storage.googleapis.com
+	helm repo update
+	kubectl create namespace monitor
+	helm install prometheus-operator stable/prometheus-operator --namespace monitor --set grafana.service.type=NodePort
+	kubectl get svc -n monitor | grep prometheus-operator-grafana
 install-logging:
 	echo "Logging: install-elasticsearch" | tee -a output.log
 	helm install elasticsearch elastic/elasticsearch -n logging -f platform/logging/elastic-values.yaml | tee -a output.log
